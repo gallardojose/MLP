@@ -32,24 +32,20 @@ def swixi(w, x):
         sum = sum + (w[i] * x[i])
     return sum
 
-def init_weights(size):
-    return np.random.randn(size) * np.sqrt(1.0 / size)
+def init_weights(rol, col):
+    return np.random.randn(rol, col) * np.sqrt(1.0 / col)
 
-def forward_propagation():
+def forward_propagation(W1, W2):
     for value in training_set:
         # input layer to hidden layer
         hidden_layer = []
         for i in range(num_hidden_nodes):
-            w = init_weights(num_input_nodes)
-            x = value[1]
-            hidden_layer.append(logistic(swixi(w, x)))
+            hidden_layer.append(logistic(swixi(W1[i], value[1])))
 
         # hidden layer to ouput layer
         output_layer = []
         for i in range(num_output_nodes):
-            w = init_weights(num_hidden_nodes)
-            x = hidden_layer
-            output_layer.append(logistic(swixi(w, x)))
+            output_layer.append(logistic(swixi(W2[i], hidden_layer)))
         print(output_layer)
 
 
@@ -61,4 +57,6 @@ num_input_nodes = len(classified_set[0][1])
 num_hidden_nodes = num_input_nodes
 num_output_nodes = 8
 
-forward_propagation()
+W1 = init_weights(num_hidden_nodes, num_input_nodes) # weight matrix from input to hidden layer
+W2 = init_weights(num_output_nodes, num_hidden_nodes) # weight matrix from hidden to output layer
+forward_propagation(W1, W2)
