@@ -57,15 +57,13 @@ def forward_propagation(training_vec):
 def back_propagation(learning_rate, iteration):
     it = 0
     while(it <= iteration):
-        print("iteration", it)
+        if it % 100 == 0:
+            print("iteration", it)
         it += 1
 
         for value in training_set:
             training_vec = normal(value[1], 96.0)
             hidden_layer, output_layer = forward_propagation(training_vec)
-
-            if it == iteration:
-                print(value[0], output_layer)
 
             # Calculate errors
             delta1 = [] # output delta
