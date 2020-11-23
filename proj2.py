@@ -23,6 +23,12 @@ def read_file(filename):
 
     return feature_vecs
 
+def normal(vec, max):
+    res = []
+    for val in vec:
+        res.append(val / max)
+    return res
+
 def logistic(x):
     return 1.0 / (1.0 + math.exp(-x))
 
@@ -39,23 +45,29 @@ def forward_propagation(training_vec):
     # input layer to hidden layer
     hidden_layer = []
     for i in range(num_hidden_nodes):
-        hidden_layer.append(logistic(swixi(W1[i], training_vec[1])))
+        hidden_layer.append(logistic(swixi(W1[i], training_vec)))
 
     # hidden layer to ouput layer
     output_layer = []
     for i in range(num_output_nodes):
         output_layer.append(logistic(swixi(W2[i], hidden_layer)))
 
-    print(training_vec[0], output_layer)
     return hidden_layer, output_layer
 
-def back_propagation(learning_rate, exit_threshold):
-    exit = False
-    while(not exit):
-        for value in training_set:
-            hidden_layer, output_layer = forward_propagation(value)
+def back_propagation(learning_rate, iteration):
+    it = 0
+    while(it <= iteration):
+        print("iteration", it)
+        it += 1
 
-            # Calculate errors & update weight
+        for value in training_set:
+            training_vec = normal(value[1], 96.0)
+            hidden_layer, output_layer = forward_propagation(training_vec)
+
+            if it == iteration:
+                print(value[0], output_layer)
+
+            # Calculate errors
             delta1 = [] # output delta
             for j in range(num_output_nodes):
                 y = output_layer[j]
@@ -71,19 +83,15 @@ def back_propagation(learning_rate, exit_threshold):
                 delta2.append(h * (1 - h) * s)
 
             # Update Weights
-            exit = True
             for i in range(num_output_nodes):
                 for j in range(num_hidden_nodes):
                     change = learning_rate * delta1[i] * hidden_layer[j]
                     W2[i][j] = W2[i][j] + change
-                    if change > exit_threshold:
-                        exit = False
             for k in range(num_input_nodes):
                 for j in range(num_hidden_nodes):
-                    change = learning_rate * delta2[j] * value[1][k]
+                    change = learning_rate * delta2[j] * training_vec[k]
                     W1[j][k] = W1[j][k] + change
-                    if change > exit_threshold:
-                        exit = False
+
 
 
 classified_set = read_file("ClassifiedSetData.txt")
@@ -96,4 +104,4 @@ num_output_nodes = 8
 
 W1 = init_weights(num_hidden_nodes, num_input_nodes) # weight matrix from input to hidden layer
 W2 = init_weights(num_output_nodes, num_hidden_nodes) # weight matrix from hidden to output layer
-back_propagation(0.3, 0.001)
+back_propagation(0.1, 5000)
