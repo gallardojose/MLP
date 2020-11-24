@@ -55,18 +55,13 @@ def forward_propagation(training_vec):
     return hidden_layer, output_layer
 
 def back_propagation(learning_rate, iteration):
-    it = 0
-    while(it <= iteration):
+    for it in range(iteration):
         if it % 100 == 0:
             print("iteration", it)
-        it += 1
 
         for value in training_set:
             training_vec = normal(value[1], 96.0)
             hidden_layer, output_layer = forward_propagation(training_vec)
-
-            if it == iteration:
-                print(value[0], output_layer)
 
             # Calculate errors
             delta1 = [] # output delta
@@ -84,14 +79,11 @@ def back_propagation(learning_rate, iteration):
                 delta2.append(h * (1 - h) * s)
 
             # Update Weights
-            for i in range(num_output_nodes):
-                for j in range(num_hidden_nodes):
-                    change = learning_rate * delta1[i] * hidden_layer[j]
-                    W2[i][j] = W2[i][j] + change
-            for k in range(num_input_nodes):
-                for j in range(num_hidden_nodes):
-                    change = learning_rate * delta2[j] * training_vec[k]
-                    W1[j][k] = W1[j][k] + change
+            for j in range(num_hidden_nodes):
+                for i in range(num_output_nodes):
+                    W2[i][j] = W2[i][j] + learning_rate * delta1[i] * hidden_layer[j]
+                for k in range(num_input_nodes):
+                    W1[j][k] = W1[j][k] + learning_rate * delta2[j] * training_vec[k]
 
 
 
@@ -106,3 +98,7 @@ num_output_nodes = 8
 W1 = init_weights(num_hidden_nodes, num_input_nodes) # weight matrix from input to hidden layer
 W2 = init_weights(num_output_nodes, num_hidden_nodes) # weight matrix from hidden to output layer
 back_propagation(0.1, 5000)
+
+for data in training_set:
+    hl, ol = forward_propagation(data[1])
+    print(data[0], ol)
