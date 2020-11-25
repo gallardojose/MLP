@@ -60,7 +60,7 @@ def back_propagation(learning_rate, iteration):
             print("iteration", it)
 
         for value in training_set:
-            training_vec = normal(value[1], 96.0)
+            training_vec = normal(value[1], max_feature_value)
             hidden_layer, output_layer = forward_propagation(training_vec)
 
             # Calculate errors
@@ -94,11 +94,12 @@ training_set = classified_set
 num_input_nodes = len(training_set[0][1])
 num_hidden_nodes = num_input_nodes
 num_output_nodes = 8
+max_feature_value = 96.0
 
 W1 = init_weights(num_hidden_nodes, num_input_nodes) # weight matrix from input to hidden layer
 W2 = init_weights(num_output_nodes, num_hidden_nodes) # weight matrix from hidden to output layer
 back_propagation(0.1, 5000)
 
 for data in training_set:
-    hl, ol = forward_propagation(normal(data[1]))
+    hl, ol = forward_propagation(normal(data[1]), max_feature_value)
     print(data[0], ol)
