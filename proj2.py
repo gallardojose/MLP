@@ -101,5 +101,5 @@ W2 = init_weights(num_output_nodes, num_hidden_nodes) # weight matrix from hidde
 back_propagation(0.1, 5000)
 
 for data in training_set:
-    hl, ol = forward_propagation(normal(data[1]), max_feature_value)
+    hl, ol = forward_propagation(normal(data[1], max_feature_value))
     print(data[0], ol)
