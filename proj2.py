@@ -130,4 +130,4 @@ for data in Training_Set:
     hl, ol = forward_propagation(normal(data[1], max_feature_value))
     print(data[0], ol)
 
-
+#this is a test whether I can commit anything to the file (Hitesh)
