@@ -113,7 +113,7 @@ def back_propagation(learning_rate, iteration):
 
 
 
-classified_set = read_file("ClassifiedSetData.txt")
+Classified_Set = read_file("ClassifiedSetData.txt")
 sets_generator()
 
 # number of hidden nodes = number of features
