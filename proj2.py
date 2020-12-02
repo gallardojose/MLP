@@ -70,21 +70,23 @@ def init_weights(rol, col):
 def forward_propagation(training_vec):
     # input layer to hidden layer
     hidden_layer = []
+    # calc logistic swixi in hidden nodes
     for i in range(num_hidden_nodes):
         hidden_layer.append(logistic(swixi(W1[i], training_vec)))
 
     # hidden layer to ouput layer
     output_layer = []
+    # calc logisitc for output layer
     for i in range(num_output_nodes):
         output_layer.append(logistic(swixi(W2[i], hidden_layer)))
 
     return hidden_layer, output_layer
 
-def back_propagation(learning_rate, iteration):
-    for it in range(iteration):
-        if it % 100 == 0:
-            print("iteration", it)
 
+def back_propagation(learning_rate, min_accuracy):
+    epochs = 0
+    while accuracy(Training_Set) < min_accuracy:
+        epochs += 1
         for value in Training_Set:
             training_vec = normal(value[1], max_feature_value)
             hidden_layer, output_layer = forward_propagation(training_vec)
@@ -110,7 +112,16 @@ def back_propagation(learning_rate, iteration):
                     W2[i][j] = W2[i][j] + learning_rate * delta1[i] * hidden_layer[j]
                 for k in range(num_input_nodes):
                     W1[j][k] = W1[j][k] + learning_rate * delta2[j] * training_vec[k]
+    return epochs
 
+
+def accuracy(set):
+    correct = 0
+    for data in set:
+        hl, ol = forward_propagation(normal(data[1], max_feature_value))
+        if (np.argmax(ol) == data[2]):
+            correct += 1
+    return correct / len(set)
 
 
 Classified_Set = read_file("ClassifiedSetData.txt")
@@ -124,10 +135,16 @@ max_feature_value = 96.0
 
 W1 = init_weights(num_hidden_nodes, num_input_nodes) # weight matrix from input to hidden layer
 W2 = init_weights(num_output_nodes, num_hidden_nodes) # weight matrix from hidden to output layer
-back_propagation(0.1, 5000)
+print("The MLP architecture is as follows. The input nodes connect to 10 hidden layer nodes which then connect to the 8 "
+      "output nodes through weights.")
+print("Initial weights\nFirst Layer: " + str(W1) + "\nSecond Layer: " + str(W2))
+print("Epochs required: " + str(back_propagation(0.2, .98)))
+print("Final weights\nFirst Layer: " + str(W1) + "\nSecond Layer: " + str(W2))
 
-for data in Training_Set:
-    hl, ol = forward_propagation(normal(data[1], max_feature_value))
-    print(data[0], ol)
+
+print("Holdout Accuracy: " + str(accuracy(Holdout_Set)))
+print("Training Accuracy: " + str(accuracy(Training_Set)))
+
 
 #this is a test whether I can commit anything to the file (Hitesh)
+
