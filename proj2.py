@@ -1,3 +1,10 @@
+# Author: Hitesh Bhavsar, Jose Gallardo, Amish Mathur, Mike Mai
+# This file contains all the code required for the project: from reading an input ClassifiedDataSet file to building a MLP architecture, determining the hidden
+# layers nodes, initial link weights. The file also has all the code that outputs the accuracy, number of true postives, false positives, true negatives, and 
+# false negatives, and other rates such as error rate, precision rate, recall rate and others of the final MLP on each of the Holdout vectors and Validation Set.
+
+and giving the classification of the decision tree based on thier computed accurracies.
+# All functions in this file also have comments explaining in detail the purpose of thier use and what they intended to do when called given the correct parameters.
 
 import re
 import math
