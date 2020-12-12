@@ -144,15 +144,14 @@ def accuracy_metrics(set):
         #print(index_of_max)
         #print("Class ")
         #print(data[2])
-        
-         if(np.argmax(ol) == data[2]):
+        if(np.argmax(ol) == data[2]):
              correct += 1
              index=data[2]
              TruePositive[index]+=1
              for i in range(leng_of_matrix):
                  if(i!=index):
                      TrueNegative[i]+=1
-         else:
+        else:
              predicted_output=index_of_max
              actual_output=data[2]
              FalsePositive[predicted_output]+=1
@@ -161,7 +160,6 @@ def accuracy_metrics(set):
              for i in range(leng_of_matrix):
                  if i not in update_except:
                      TrueNegative[i]+=1
-        
     return correct / len(set)
 
 def clearmatix():
